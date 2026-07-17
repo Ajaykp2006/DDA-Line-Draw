@@ -3,7 +3,7 @@
 An interactive, web-based tool designed to visualize the **Digital Differential Analyzer (DDA)** line-drawing algorithm on a pixelated grid canvas. This visualizer provides a real-time, interactive environment to observe how lines are rasterized onto discrete grid cells from given coordinates.
 
 ## 🔗 Important Links
-- **Live Website:**[DDA-Line-Draw Visualizer:](https://script.google.com/macros/s/AKfycbzvvkHnuh8hwYP8wajUrhAal-gOYxFPLvxePRkz-jI/dev)
+- **Live Website:**[DDA-Line-Draw Visualizer:](https://script.google.com/macros/s/AKfycbwWko-5qWWstLSFF_LCLdVhSZVrWvYZgky9JWec7vRcXzVerBhZITv8vTtiLemd9buw/exec)
 
 ## 📸 Screenshot
 ![DDA-Line-Draw Visualizer PageScreenshot] <img width="1917" height="1090" alt="Screenshot 2026-07-18 033049" src="https://github.com/user-attachments/assets/1290e78d-887c-4004-848d-712a18096d96" />
