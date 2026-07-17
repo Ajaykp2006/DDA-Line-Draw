@@ -1,4 +1,4 @@
-# DDA Line Algorithm Visualizer
+# DDA Line Algorithm Visualizer(GOOGLE APP SCRIPT)
 
 An interactive, web-based tool designed to visualize the **Digital Differential Analyzer (DDA)** line-drawing algorithm on a pixelated grid canvas. This visualizer provides a real-time, interactive environment to observe how lines are rasterized onto discrete grid cells from given coordinates.
 
