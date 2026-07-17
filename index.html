@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDA Line Algorithm Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0fdf4;
+            color: #1f2937;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            min-width: 250px;
+        }
+
+        .coordinate-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            width: 100%;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        input {
+            padding: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #16a34a;
+        }
+
+        button {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #15803d;
+        }
+
+        canvas {
+            border: 2px solid #d1d5db;
+            background-color: #ffffff;
+            border-radius: 4px;
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>DDA Algorithm Visualizer</h2>
+
+    <div class="container">
+        <canvas id="pixelGrid" width="400" height="400"></canvas>
+
+        <div class="controls">
+            <h3>Start Point</h3>
+            <div class="coordinate-group">
+                <div class="input-box">
+                    <label>X1 (0-19)</label>
+                    <input type="number" id="x1" value="2" min="0" max="19">
+                </div>
+                <div class="input-box">
+                    <label>Y1 (0-19)</label>
+                    <input type="number" id="y1" value="3" min="0" max="19">
+                </div>
+            </div>
+
+            <h3>End Point</h3>
+            <div class="coordinate-group">
+                <div class="input-box">
+                    <label>X2 (0-19)</label>
+                    <input type="number" id="x2" value="17" min="0" max="19">
+                </div>
+                <div class="input-box">
+                    <label>Y2 (0-19)</label>
+                    <input type="number" id="y2" value="14" min="0" max="19">
+                </div>
+            </div>
+
+            <button onclick="drawLine()">Calculate & Draw</button>
+            <button onclick="clearGrid()" style="background-color: #9ca3af;">Clear Grid</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pixelGrid');
+        const ctx = canvas.getContext('2d');
+        const gridSize = 20; // 20x20 grid
+        const cellSize = canvas.width / gridSize;
+
+        function drawGridLines() {
+            ctx.strokeStyle = '#f3f4f6';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= canvas.width; i += cellSize) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
+            }
+        }
+
+        function fillPixel(x, y, color = '#16a34a') {
+            // Check bounds so we don't draw outside the grid
+            if(x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+                ctx.fillStyle = color;
+                // We fill the square, leaving a 1px border so grid lines are still visible
+                ctx.fillRect((x * cellSize) + 1, (y * cellSize) + 1, cellSize - 2, cellSize - 2);
+            }
+        }
+
+        function clearGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGridLines();
+        }
+
+        function drawLine() {
+            clearGrid();
+            
+            // 1. Get user inputs
+            let x1 = parseInt(document.getElementById('x1').value);
+            let y1 = parseInt(document.getElementById('y1').value);
+            let x2 = parseInt(document.getElementById('x2').value);
+            let y2 = parseInt(document.getElementById('y2').value);
+
+            // Highlight the exact start point in blue
+            fillPixel(x1, y1, '#2563eb'); 
+            
+            // 2. DDA ALGORITHM CORE LOGIC
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            
+            // Find the maximum difference to determine total steps needed
+            let steps = Math.max(Math.abs(dx), Math.abs(dy));
+            
+            // Calculate the increment for each step
+            let xInc = dx / steps;
+            let yInc = dy / steps;
+            
+            let x = x1;
+            let y = y1;
+            
+            // 3. Loop through the steps and draw the pixels
+            for (let i = 0; i < steps; i++) {
+                x += xInc;
+                y += yInc;
+                // Math.round snaps the fractional values to the nearest integer pixel grid
+                fillPixel(Math.round(x), Math.round(y)); 
+            }
+            
+            // Highlight the exact end point in red
+            fillPixel(x2, y2, '#ef4444'); 
+        }
+
+        // Initialize the empty grid on load
+        clearGrid();
+    </script>
+</body>
+</html>
